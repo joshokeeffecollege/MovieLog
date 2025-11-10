@@ -1,0 +1,40 @@
+<%# Search page: query → TMDB results → add to library %>
+<div class="container py-4">
+  <h1 class="mb-3">Movie Log</h1>
+
+  <%= form_with url: search_path, method: :get, local: true, class: "row g-2 mb-4" do %>
+    <div class="col-auto">
+      <%= text_field_tag :q, @q, placeholder: "Search for a movie", class: "form-control" %>
+    </div>
+    <div class="col-auto">
+      <%= submit_tag "Search", class: "btn btn-primary" %>
+    </div>
+    <div class="col-auto">
+      <%= link_to "My Library", movies_path, class: "btn btn-outline-secondary" %>
+    </div>
+  <% end %>
+
+  <% if @q.present? %>
+    <h2 class="h5">Results for “<%= @q %>”</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+      <% @results.each do |m| %>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <% if m[:poster_path].present? %>
+              <img class="card-img-top" alt="Poster" src="https://image.tmdb.org/t/p/w300<%= m[:poster_path] %>">
+            <% end %>
+            <div class="card-body">
+              <h5 class="card-title"><%= m[:title] %> <small class="text-muted"><%= m[:release_year] %></small></h5>
+              <p class="card-text"><%= truncate(m[:overview], length: 140) %></p>
+              <%# Send normalized hash straight into Movies#create %>
+              <%= button_to "Add to Library",
+                            movies_path(movie: m),
+                            method: :post,
+                            class: "btn btn-success" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
