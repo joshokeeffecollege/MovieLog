@@ -1,16 +1,34 @@
-<p style="color: green"><%= notice %></p>
+<div class="container py-4">
+  <h1 class="h4 mb-3">My Library</h1>
 
-<% content_for :title, "Movies" %>
-
-<h1>Movies</h1>
-
-<div id="movies">
-  <% @movies.each do |movie| %>
-    <%= render movie %>
-    <p>
-      <%= link_to "Show this movie", movie %>
-    </p>
+  <% if @movies.any? %>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2">
+      <% @movies.each do |m| %>
+        <div class="col d-flex justify-content-center">
+          <div class="card text-center shadow-sm" style="width: 14rem;">
+            <% if m.poster_path.present? %>
+              <img src="https://image.tmdb.org/t/p/original<%= m.poster_path %>">
+            <% end %>
+            <div class="card-body p-2">
+              <h6 class="card-title mb-2">
+                <%= m.title %>
+                <small class="text-muted"><%= m.release_year %></small>
+              </h6>
+              <%= link_to "Show", movie_path(m), class: "btn btn-sm btn-primary m-2" %>
+              <%= button_to "Delete",
+                            movie_path(m),
+                            method: :delete,
+                            form: { data: { turbo_confirm: "Delete this movie?" } },
+                            class: "btn btn-sm btn-outline-danger" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center text-muted py-5">
+      <p>Your library is empty.</p>
+      <%= link_to "Search for movies", search_path, class: "btn btn-success" %>
+    </div>
   <% end %>
 </div>
-
-<%= link_to "New movie", new_movie_path %>

@@ -16,21 +16,20 @@
 
   <% if @q.present? %>
     <h2 class="h5">Results for “<%= @q %>”</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2">
       <% @results.each do |m| %>
-        <div class="col">
-          <div class="card h-100 shadow-sm">
+        <div class="col d-flex justify-content-center">
+          <div class="card text-center shadow-sm" style="width: 14rem;">
             <% if m[:poster_path].present? %>
-              <img class="card-img-top" alt="Poster" src="https://image.tmdb.org/t/p/w300<%= m[:poster_path] %>">
+              <img class="card-img-top img-fluid" alt="Poster" src="https://image.tmdb.org/t/p/original<%= m[:poster_path] %>">
             <% end %>
-            <div class="card-body">
-              <h5 class="card-title"><%= m[:title] %> <small class="text-muted"><%= m[:release_year] %></small></h5>
-              <p class="card-text"><%= truncate(m[:overview], length: 140) %></p>
-              <%# Send normalized hash straight into Movies#create %>
+            <div class="card-body p-2">
+              <h6 class="card-title mb-2"><%= m[:title] %> <small class="text-muted"><%= m[:release_year] %></small>
+              </h6>
               <%= button_to "Add to Library",
                             movies_path(movie: m),
                             method: :post,
-                            class: "btn btn-success" %>
+                            class: "btn btn-sm btn-success" %>
             </div>
           </div>
         </div>
