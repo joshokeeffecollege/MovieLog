@@ -21,7 +21,7 @@
         <div class="col d-flex justify-content-center">
           <div class="card text-center shadow-sm" style="width: 14rem;">
             <% if m[:poster_path].present? %>
-              <img class="card-img-top img-fluid" alt="Poster" src="https://image.tmdb.org/t/p/original<%= m[:poster_path] %>">
+              <img class="card-img-top img-fluid" alt="Poster" src="https://image.tmdb.org/t/p/original<%= m[:poster_path] %>" class="img-fluid mx-auto d-block rounded">
             <% end %>
             <div class="card-body p-2">
               <h6 class="card-title mb-2"><%= m[:title] %> <small class="text-muted"><%= m[:release_year] %></small>
