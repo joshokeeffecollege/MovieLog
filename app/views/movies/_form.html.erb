@@ -1,37 +1,29 @@
-<%= form_with(model: movie) do |form| %>
+<%= form_with(model: movie, local: true, class: "needs-validation") do |form| %>
   <% if movie.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(movie.errors.count, "error") %> prohibited this movie from being saved:</h2>
-
-      <ul>
-        <% movie.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <h4 class="alert-heading"><%= pluralize(movie.errors.count, "error") %> stopped this movie from being saved.</h4>
+    <ul class="mb-0">
+      <% movie.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
   <% end %>
 
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-control", placeholder: "Enter movie title." %>
   </div>
 
-  <div>
-    <%= form.label :tmdb_id, style: "display: block" %>
-    <%= form.text_field :tmdb_id %>
+  <div class="mb-3">
+    <%= form.label :overview, class: "form-label" %>
+    <%= form.text_area :overview, class: "form-control", rows: 4, placeholder: "Short description or summary" %>
   </div>
 
-  <div>
-    <%= form.label :overview, style: "display: block" %>
-    <%= form.textarea :overview %>
+  <div class="mb-3">
+    <%= form.label :release_year, class: "form-label" %>
+    <%= form.number_field :release_year, class: "form-control", placeholder: "e.g. 2025" %>
   </div>
 
-  <div>
-    <%= form.label :release_year, style: "display: block" %>
-    <%= form.number_field :release_year %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="text-center">
+    <%= form.submit class: "btn btn-primary px-4" %>
   </div>
 <% end %>
