@@ -10,12 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_10_214200) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_12_113526) do
   create_table "movies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "cast"
     t.datetime "created_at", null: false
+    t.string "director"
     t.text "overview"
     t.string "poster_path"
     t.integer "release_year"
+    t.integer "runtime"
     t.string "title", null: false
     t.bigint "tmdb_id", null: false
     t.datetime "updated_at", null: false
