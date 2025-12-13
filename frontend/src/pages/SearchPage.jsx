@@ -47,7 +47,14 @@ export default function SearchPage() {
       await addToCollection(payload);
       setInfo(`Added: ${movie.title}`);
     } catch (err) {
-      setError(err.message || "Add failed");
+      const msg = err.message || "Add failed";
+
+      if (
+        msg.includes("has already been taken") ||
+        msg.toLowerCase().includes("tmdb")
+      ) {
+        setInfo(`${movie.title} is already in your collection`);
+      }
     }
   }
 
