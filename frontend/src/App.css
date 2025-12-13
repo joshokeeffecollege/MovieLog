@@ -1,42 +1,91 @@
+body {
+  background-color: #faf9f5;
+  min-height: 100vh;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+  min-height: 100vh;
 }
 
 .card {
-  padding: 2em;
+  border-radius: 1rem;
 }
 
-.read-the-docs {
-  color: #888;
+.page-card {
+  width: 100%;
+}
+
+.nav-link.active {
+  font-weight: 600;
+}
+
+.card-img-top {
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+}
+
+.search-page {
+  width: 100%;
+}
+
+.search-hero {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  border-radius: 1.25rem;
+  color: #fff;
+  padding: 2.5rem;
+  box-shadow: 0 1rem 2.5rem rgba(13, 110, 253, 0.25);
+}
+
+.search-hero p {
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 48rem;
+}
+
+.search-placeholder {
+  border: 1px dashed rgba(13, 110, 253, 0.35);
+  border-radius: 1rem;
+  padding: 2.5rem 1.5rem;
+  background-color: rgba(13, 110, 253, 0.03);
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.result-card {
+  border: none;
+  border-radius: 0.85rem;
+  box-shadow: 0 0.35rem 1rem rgba(15, 23, 42, 0.08);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1.25rem 2.5rem rgba(15, 23, 42, 0.15);
+}
+
+.result-card__poster {
+  object-fit: cover;
+  height: 280px;
+  border-top-left-radius: 0.85rem;
+  border-top-right-radius: 0.85rem;
+}
+
+.result-card__fallback {
+  height: 280px;
+  border-top-left-radius: 0.85rem;
+  border-top-right-radius: 0.85rem;
+}
+
+.result-card__overview {
+  color: #495057;
+  font-size: 0.925rem;
+  line-height: 1.4;
+  min-height: 4.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

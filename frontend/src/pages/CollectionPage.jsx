@@ -1,71 +1,104 @@
-import {useEffect, useState} from 'react'
-import {listCollection, removeFromCollection} from '../api'
+import { useEffect, useState } from "react";
+import { listCollection, removeFromCollection } from "../api";
 
 export default function CollectionPage() {
-    const [items, setItems] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    async function load() {
-        setError('')
-        setLoading(true)
-        try {
-            const data = await listCollection()
-            setItems(data)
-        } catch (err) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
-        }
+  async function load() {
+    setError("");
+    setLoading(true);
+    try {
+      const data = await listCollection();
+      setItems(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    useEffect(() => {
-        load()
-    }, [])
+  useEffect(() => {
+    load();
+  }, []);
 
-    async function onRemove(id) {
-        setError('')
-        try {
-            await removeFromCollection(id)
-            setItems((prev) => prev.filter((x) => x.id !== id))
-        } catch (err) {
-            setError(err.message)
-        }
+  async function onRemove(id) {
+    setError("");
+    try {
+      await removeFromCollection(id);
+      setItems((prev) => prev.filter((x) => x.id !== id));
+    } catch (err) {
+      setError(err.message);
     }
+  }
 
-    return (
+  return (
+    <div className="w-100 p-4 p-md-5">
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h1 className="h3 m-0">My Collection</h1>
-                <button className="btn btn-outline-secondary btn-sm" onClick={load} disabled={loading}>
-                    Refresh
-                </button>
-            </div>
-
-            {error && <div className="alert alert-danger">{error}</div>}
-            {loading && <div>Loading…</div>}
-
-            {!loading && items.length === 0 && (
-                <div className="alert alert-info">No movies yet. Add some from Search.</div>
-            )}
-
-            <div className="list-group">
-                {items.map((m) => (
-                    <div key={m.id} className="list-group-item">
-                        <div className="d-flex justify-content-between align-items-start">
-                            <div className="me-3">
-                                <div className="fw-semibold">{m.title}</div>
-                                <div className="text-muted small">
-                                    {m.release_date || 'No date'} · Rating: {m.vote_average ?? 'N/A'}
-                                </div>
-                            </div>
-                            <button className="btn btn-outline-danger btn-sm" onClick={() => onRemove(m.id)}>
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+          <h1 className="h3 mb-0">My Collection</h1>
         </div>
-    )
+      </div>
+
+      {error && <div className="alert alert-danger">{error}</div>}
+      {loading && (
+        <div className="d-flex align-items-center gap-2 text-muted mb-3">
+          <div
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></div>
+          Loading…
+        </div>
+      )}
+
+      {!loading && items.length === 0 && (
+        <div className="alert alert-secondary text-center py-4 rounded-4">
+          No movies yet.
+        </div>
+      )}
+
+      <div className="row row-cols-2 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-3">
+        {items.map((m) => (
+          <div key={m.id} className="col">
+            <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+              {m.poster_path ? (
+                <img
+                  className="card-img-top rounded-top-4"
+                  src={`https://image.tmdb.org/t/p/w500${m.poster_path}`}
+                  alt={m.title}
+                />
+              ) : (
+                <div
+                  className="card-img-top rounded-top-4 bg-light d-flex align-items-center justify-content-center"
+                  style={{ height: 260 }}
+                >
+                  <span className="text-muted small">No poster</span>
+                </div>
+              )}
+              <div className="card h-100 border-0 shadow-sm rounded-4">
+                <div className="card-body d-flex flex-column gap-2">
+                  <div>
+                    <div className="fw-semibold">{m.title}</div>
+                    <div className="text-muted small">
+                      {m.release_date || "Unknown date"} · Rating{" "}
+                      {m.vote_average ?? "N/A"}
+                    </div>
+                  </div>
+
+                  <button
+                    className="btn btn-outline-danger btn-sm mt-auto align-self-start"
+                    onClick={() => onRemove(m.id)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
