@@ -81,10 +81,6 @@ export default function CollectionPage() {
                 <div className="card-body d-flex flex-column gap-2">
                   <div>
                     <div className="fw-semibold">{m.title}</div>
-                    <div className="text-muted small">
-                      {m.release_date || "Unknown date"} · Rating{" "}
-                      {m.vote_average ?? "N/A"}
-                    </div>
                   </div>
 
                   <button

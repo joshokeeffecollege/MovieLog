@@ -1,10 +1,9 @@
 class CollectionItemsController < ApplicationController
-  before_action :set_collection_item, only: %i[ show update destroy ]
+  before_action :set_collection_item, only: %i[show update destroy]
 
   # GET /collection_items
   def index
     @collection_items = CollectionItem.all
-
     render json: @collection_items
   end
 
@@ -15,12 +14,13 @@ class CollectionItemsController < ApplicationController
 
   # POST /collection_items
   def create
+    # Strong params protect against mass assignment vulnerabilities
     @collection_item = CollectionItem.new(collection_item_params)
 
     if @collection_item.save
-      render json: @collection_item, status: :created, location: @collection_item
+      render json: @collection_item, status: :created
     else
-      render json: @collection_item.errors, status: :unprocessable_content
+      render json: { errors: @collection_item.errors }, status: :unprocessable_entity
     end
   end
 
@@ -29,23 +29,32 @@ class CollectionItemsController < ApplicationController
     if @collection_item.update(collection_item_params)
       render json: @collection_item
     else
-      render json: @collection_item.errors, status: :unprocessable_content
+      render json: { errors: @collection_item.errors }, status: :unprocessable_entity
     end
   end
 
   # DELETE /collection_items/1
   def destroy
     @collection_item.destroy!
+    head :no_content
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_collection_item
-      @collection_item = CollectionItem.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def collection_item_params
-      params.expect(collection_item: [ :tmdb_id, :title, :poster_path, :release_date, :vote_average ])
-    end
+  def set_collection_item
+    # Use standard params and coerce to integer for hygiene.
+    @collection_item = CollectionItem.find(params[:id].to_i)
+  end
+
+  def collection_item_params
+    # require(:collection_item) ensures payload is properly nested
+    # permit(...) whitelists allowed fields to protect against mass assignment
+    params.require(:collection_item).permit(
+      :tmdb_id,
+      :title,
+      :poster_path,
+      :release_date,
+      :vote_average
+    )
+  end
 end
