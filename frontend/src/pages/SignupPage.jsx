@@ -57,6 +57,9 @@ export default function SignupPage({ onAuthed }) {
             />
           </div>
           <button className="btn btn-primary">Sign up</button>
+          <div className="text-muted sm">
+            Already have an account? <a href="/login">Log in</a>
+          </div>
         </form>
       </div>
     </div>

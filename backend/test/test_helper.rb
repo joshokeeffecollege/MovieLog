@@ -13,3 +13,13 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
   end
 end
+
+module ActionDispatch
+  class IntegrationTest
+    # Helper method to authenticate requests in controller tests
+    def auth_headers(user)
+      token = ApplicationController.new.send(:issue_token, user.id)
+      { "Authorization" => "Bearer #{token}" }
+    end
+  end
+end

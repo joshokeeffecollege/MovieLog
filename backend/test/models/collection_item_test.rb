@@ -12,15 +12,24 @@ class CollectionItemTest < ActiveSupport::TestCase
   end
 
   test "requires title" do
-    item.CollectionItem.new(tmdb_id: 999)
+    item = CollectionItem.new(tmdb_id: 999)
     assert_not item.valid?
     assert_includes item.errors[:title], "can't be blank"
   end
 
-  test "tmdb_id must be unique" do 
+  test "tmdb_id must be unique per user" do
     existing = collection_items(:one)
-    dup = CollectionItem.new(tmdb_id: existing.tmdb_id, title: "Duplicate")
+    # Same user, same tmdb_id - should be invalid
+    dup = CollectionItem.new(user: existing.user, tmdb_id: existing.tmdb_id, title: "Duplicate")
     assert_not dup.valid?
     assert_includes dup.errors[:tmdb_id], "has already been taken"
+  end
+
+  test "different users can have same tmdb_id" do
+    existing = collection_items(:one)
+    different_user = users(:two)
+    # Different user, same tmdb_id - should be valid
+    item = CollectionItem.new(user: different_user, tmdb_id: existing.tmdb_id, title: "Same Movie")
+    assert item.valid?
   end
 end

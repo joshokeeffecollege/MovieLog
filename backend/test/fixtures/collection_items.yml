@@ -1,15 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  user: one
   tmdb_id: 1
-  title: MyString
-  poster_path: MyString
-  release_date: MyString
-  vote_average: 1.5
+  title: The Matrix
+  poster_path: /path/to/poster1.jpg
+  release_date: 1999-03-31
+  vote_average: 8.7
 
 two:
-  tmdb_id: 1
-  title: MyString
-  poster_path: MyString
-  release_date: MyString
-  vote_average: 1.5
+  user: two
+  tmdb_id: 2
+  title: Inception
+  poster_path: /path/to/poster2.jpg
+  release_date: 2010-07-16
+  vote_average: 8.8

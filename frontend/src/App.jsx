@@ -46,10 +46,7 @@ function AppShell() {
             {!user ? (
               <>
                 <NavLink className="nav-link" to="/login">
-                  Login
-                </NavLink>
-                <NavLink className="nav-link" to="/signup">
-                  Sign up
+                  Account
                 </NavLink>
               </>
             ) : (

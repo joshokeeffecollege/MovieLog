@@ -1,42 +1,89 @@
 name: CI
 
 on:
-  pull_request:
+  pull_request: # when a pull request is opened
+    branches: [main, master]
   push:
-    branches: [ main ]
+    branches: [main, master]
+
+  # allows manual triggering of the workflow from the Actions tab
+  workflow_dispatch:
 
 jobs:
+  # Job 1: Security scanning and testing
   scan_ruby:
     runs-on: ubuntu-latest
 
+    # set default directory for all run commands
+    defaults:
+      run:
+        working-directory: backend
+
+    # steps to run
     steps:
+      # step 1: get code from the repository
       - name: Checkout code
         uses: actions/checkout@v5
 
+      # step 2: set up Ruby environment
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          ruby-version: 3.4.7
+          working-directory: backend
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
+      # step 3: install dependencies
+      - name: Install dependencies
+        run: bundle install
+
+      # step 4: set up database
+      - name: Set up database
+        run: |
+          bin/rails db:create RAILS_ENV=test
+          bin/rails db:schema:load RAILS_ENV=test
+        env:
+          RAILS_ENV: test
+
+      # step 5: run all tests
+      - name: Run tests
+        run: bin/rails test
+        env:
+          RAILS_ENV: test
+
+      # step 6: security scans
+      - name: Scan for Rails security vulnerabilities
         run: bin/brakeman --no-pager
-      
-      - name: Scan for known security vulnerabilities in gems used
+
+      # step 7: scan for vulnerable gems
+      - name: Scan for vulnerable gems
         run: bin/bundler-audit
-      
+
+  # job 2: code style linting
   lint:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
+
     steps:
+      # step 1: get code from the repository
       - name: Checkout code
         uses: actions/checkout@v5
 
+      # step 2: set up Ruby environment
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          ruby-version: 3.4.7 # specify Ruby version to match mine
+          working-directory: backend
 
+      # 3: prepare RuboCop cache
       - name: Prepare RuboCop cache
         uses: actions/cache@v4
         env:
@@ -49,28 +96,3 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
-
-  test:
-    runs-on: ubuntu-latest
-
-    # services:
-    #  redis:
-    #    image: valkey/valkey:8
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Run tests
-        env:
-          RAILS_ENV: test
-          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test

@@ -6,6 +6,18 @@ export default function CollectionPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-outline-warning text-center">
+          <h4>Authentication Required</h4>
+          <p>Please <a href="/login">log in</a> or <a href="/signup">sign up</a> to view your collection</p>
+        </div>
+      </div>
+    )
+  }
+
   async function load() {
     setError("");
     setLoading(true);
