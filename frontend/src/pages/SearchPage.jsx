@@ -49,11 +49,17 @@ export default function SearchPage() {
     } catch (err) {
       const msg = err.message || "Add failed";
 
-      if (
-        msg.includes("has already been taken") ||
-        msg.toLowerCase().includes("tmdb")
+      // check if the user is logged in
+      if (msg.includes("Invalid email or password") || msg.includes("401")) {
+        setError("You must be logged in to add movies to your collection.");
+      } else if (
+        msg.includes(
+          "has already been taken" || msg.toLowerCase().includes("tmdb")
+        )
       ) {
-        setInfo(`${movie.title} is already in your collection`);
+        setInfo(`${movie.title} is already in your collection.`);
+      } else {
+        setError(msg);
       }
     }
   }
