@@ -7,6 +7,8 @@ class User < ApplicationRecord
   # Database column: `password_digest` (string, not null)
   # Virtual attributes: `password`, `password_confirmation`
 
+  has_many :collection_items, dependent: :destroy
+
   attr_accessor :password, :password_confirmation
 
   before_validation do

@@ -4,7 +4,7 @@ class CollectionItemsController < ApplicationController
 
   # GET /collection_items
   def index
-    @collection_items = CollectionItem.all
+    @collection_items = current_user.collection_items
     render json: @collection_items
   end
 
@@ -16,7 +16,7 @@ class CollectionItemsController < ApplicationController
   # POST /collection_items
   def create
     # Strong params protect against mass assignment vulnerabilities
-    @collection_item = CollectionItem.new(collection_item_params)
+    @collection_item = current_user.collection_items.new(collection_item_params)
 
     if @collection_item.save
       render json: @collection_item, status: :created
