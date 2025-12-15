@@ -1,8 +1,23 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
+function getToken() {
+    return localStorage.getItem("token");
+}
+
+export function setToken() {
+    if (!token) localStorage.removeItem("token");
+    else localStorage.setItem("token", token);
+}
+
 async function http(path, options = {}) {
+    const token = getToken();
+
     const res = await fetch(`${API_BASE}${path}`, {
-        headers: {'Content-Type': 'application/json', ...(options.headers || {})},
+        headers: {
+            "Content-Type": "application/json",
+            ...(token ? {Authorization: `Bearer ${token}`} : {}),
+            ...(options.headers || {}),
+        },
         ...options,
     });
 
@@ -11,6 +26,24 @@ async function http(path, options = {}) {
         throw new Error(text || `Request failed: ${res.status}`);
     }
     return res.json();
+}
+
+export function signup(email, password, passwordConfirmation) {
+    return http(`/signup`, {
+        method: "POST",
+        body: JSON.stringify({user: {email, password, password_confirmation: passwordConfirmation}}),
+    });
+}
+
+export function login(email, password) {
+    return http(`/login`, {
+        method: "POST",
+        body: JSON.stringify({email, password}),
+    });
+}
+
+export function me() {
+    return http(`/me`);
 }
 
 export async function searchMovies(query) {
@@ -30,11 +63,11 @@ export function listCollection() {
 
 export function addToCollection(movie) {
     return http(`/collection_items`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({collection_item: movie}),
     });
 }
 
 export function removeFromCollection(id) {
-    return http(`/collection_items/${id}`, {method: 'DELETE'});
+    return http(`/collection_items/${id}`, {method: "DELETE"});
 }

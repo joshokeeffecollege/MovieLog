@@ -1,4 +1,5 @@
 class CollectionItemsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_collection_item, only: %i[show update destroy]
 
   # GET /collection_items

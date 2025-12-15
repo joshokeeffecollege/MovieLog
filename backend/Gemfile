@@ -35,6 +35,9 @@ gem "image_processing", "~> 1.2"
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 gem "rack-cors"
 
+# Password hashing
+gem "argon2", "~> 2.3"
+
 gem "dotenv-rails", groups: [:development, :test]
 
 group :development, :test do

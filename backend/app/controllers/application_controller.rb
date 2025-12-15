@@ -28,4 +28,47 @@ class ApplicationController < ActionController::API
       "camera=(), geolocation=(), microphone=(), payment=(), usb=()"
     )
   end
+
+   def token_verifier
+    @token_verifier ||= ActiveSupport::MessageVerifier.new(
+      Rails.application.secret_key_base,
+      digest: "SHA256",
+      serializer: JSON
+    )
+  end
+
+  def issue_token(user_id)
+    token_verifier.generate({ user_id: user_id, iat: Time.now.to_i })
+  end
+
+  def decode_token(token)
+    token_verifier.verify(token)
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    nil
+  end
+
+  def bearer_token
+    header = request.headers["Authorization"].to_s
+    return nil unless header.start_with?("Bearer ")
+    header.delete_prefix("Bearer ").strip
+  end
+
+  def current_user
+    return @current_user if defined?(@current_user)
+
+    payload = bearer_token ? decode_token(bearer_token) : nil
+
+    # Optional expiry: 7 days
+    if payload && payload["iat"] && payload["iat"].to_i < 7.days.ago.to_i
+      @current_user = nil
+      return nil
+    end
+
+    @current_user = payload ? User.find_by(id: payload["user_id"]) : nil
+  end
+
+  def authenticate_user!
+    return if current_user
+    render json: { error: "Unauthorized" }, status: :unauthorized
+  end
 end
