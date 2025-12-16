@@ -74,6 +74,6 @@ class ApplicationController < ActionController::API
 
   def authenticate_user!
     return if current_user
-    render json: { error: "Unauthorized" }, status: :unauthorized
+    render json: { error: "Unauthorized" }, status: :unauthorized and return
   end
 end
