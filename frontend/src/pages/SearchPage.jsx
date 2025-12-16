@@ -1,13 +1,27 @@
-import { useState } from "react";
-import { searchMovies, addToCollection } from "../api";
+import { useState, useEffect } from "react";
+import { searchMovies } from "../api";
 import SearchResults from "../components/SearchResults.jsx";
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [query, setQuery] = useState(() => {
+    return sessionStorage.getItem("searchQuery") || "";
+  });
+  const [results, setResults] = useState(() => {
+    const saved = sessionStorage.getItem("searchResults");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
+
+  // Save search state to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem("searchQuery", query);
+  }, [query]);
+
+  useEffect(() => {
+    sessionStorage.setItem("searchResults", JSON.stringify(results));
+  }, [results]);
 
   // Handle search form submission
   async function onSearch(e) {
@@ -31,43 +45,6 @@ export default function SearchPage() {
       setError(err.message || "Search failed");
     } finally {
       setLoading(false);
-    }
-  }
-
-  // Handle adding a movie to the collection
-  async function onAdd(movie) {
-    setError("");
-    setInfo("");
-
-    // Prepare payload
-    const payload = {
-      tmdb_id: movie.id,
-      title: movie.title,
-      poster_path: movie.poster_path,
-      release_date: movie.release_date,
-      vote_average: movie.vote_average,
-    };
-
-    // Attempt to add to collection
-    try {
-      await addToCollection(payload);
-      setInfo(`Added: ${movie.title}`);
-    } catch (err) {
-      const msg = err.message || "Add failed";
-
-      // check if the user is logged in
-      if (msg.includes("Invalid email or password") || msg.includes("401")) {
-        setError("You must be logged in to add movies to your collection.");
-      } else if (
-        msg.includes(
-          // Check for duplicate error messages
-          "has already been taken" || msg.toLowerCase().includes("tmdb")
-        )
-      ) {
-        setInfo(`${movie.title} is already in your collection.`);
-      } else {
-        setError(msg);
-      }
     }
   }
 
@@ -100,16 +77,22 @@ export default function SearchPage() {
         </div>
       </div>
 
+      {/* Loading state */}
+      {loading && (
+        <div className="d-flex justify-content-center align-items-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <span className="ms-3 text-muted">Searching movies...</span>
+        </div>
+      )}
+
       {/* Error handling */}
       {error && <div className="alert alert-danger">{error}</div>}
       {info && <div className="alert alert-success">{info}</div>}
 
-      {/* Display message when added to collection */}
-      {results.length === 0 && !loading && !error ? (
-        <div></div>
-      ) : (
-        <SearchResults results={results} onAdd={onAdd} />
-      )}
+      {/* Display search results */}
+      {!loading && results.length > 0 && <SearchResults results={results} />}
     </div>
   );
 }

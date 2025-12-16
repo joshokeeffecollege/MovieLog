@@ -1,5 +1,35 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { listCollection, removeFromCollection } from "../api";
+
+function CollectionMovieCard({ movie, onRemove }) {
+  const navigate = useNavigate();
+  const [imageError, setImageError] = useState(false);
+  const showPoster = movie.poster_path && !imageError;
+
+  return (
+    <div
+      className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden movie-card"
+      onClick={() => navigate(`/movie/${movie.tmdb_id}`, { state: { movie } })}
+    >
+      {showPoster ? (
+        <img
+          className="card-img-top rounded-top-4"
+          src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          alt={movie.title}
+          onError={() => setImageError(true)}
+        />
+      ) : (
+        <div
+          className="card-img-top rounded-top-4 bg-light d-flex align-items-center justify-content-center"
+          style={{ height: 260 }}
+        >
+          <span className="text-muted small">No poster</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function CollectionPage() {
   const [items, setItems] = useState([]);
@@ -89,36 +119,7 @@ export default function CollectionPage() {
       <div className="row row-cols-2 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-3">
         {items.map((m) => (
           <div key={m.id} className="col">
-            <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
-              {m.poster_path ? (
-                <img
-                  className="card-img-top rounded-top-4"
-                  src={`https://image.tmdb.org/t/p/w500${m.poster_path}`}
-                  alt={m.title}
-                />
-              ) : (
-                <div
-                  className="card-img-top rounded-top-4 bg-light d-flex align-items-center justify-content-center"
-                  style={{ height: 260 }}
-                >
-                  <span className="text-muted small">No poster</span>
-                </div>
-              )}
-              <div className="card h-100 border-0 shadow-sm rounded-4">
-                <div className="card-body d-flex flex-column gap-2">
-                  <div>
-                    <div className="fw-semibold">{m.title}</div>
-                  </div>
-
-                  <button
-                    className="btn btn-outline-danger btn-sm mt-auto align-self-start"
-                    onClick={() => onRemove(m.id)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
+            <CollectionMovieCard movie={m} onRemove={onRemove} />
           </div>
         ))}
       </div>

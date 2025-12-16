@@ -18,6 +18,11 @@ module Tmdb
       get_json("/search/movie", { query: query_string.to_s })
     end
 
+    # Get movie credits (cast and crew) by movie ID
+    def movie_credits(movie_id)
+      get_json("/movie/#{movie_id}/credits", {})
+    end
+
     private
 
     # Perform a GET request and parse JSON response

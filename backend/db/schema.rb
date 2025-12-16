@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_14_173745) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_16_144950) do
   create_table "collection_items", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "overview"
     t.string "poster_path"
     t.string "release_date"
     t.string "title"

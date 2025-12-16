@@ -3,7 +3,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  NavLink,
   Navigate,
   useNavigate,
 } from "react-router-dom";
@@ -11,6 +10,8 @@ import SearchPage from "./pages/SearchPage";
 import CollectionPage from "./pages/CollectionPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import MovieDetailsPage from "./pages/MovieDetailsPage";
+import Navbar from "./components/Navbar";
 import { me, setToken } from "./api";
 import { useEffect, useState } from "react";
 
@@ -33,71 +34,45 @@ function AppShell() {
   }
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-column">
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div className="container-fluid px-4">
-          <span className="navbar-brand fw-semibold">MovieLog</span>
+    <div className="min-vh-100 d-flex flex-column" style={{ backgroundColor: "var(--bg-main)" }}>
+      <Navbar user={user} onLogout={logout} />
 
-          {/* Navigation bar */}
-          <div className="navbar-nav ms-auto gap-2">
-            <NavLink className="nav-link" to="/search">
-              Search
-            </NavLink>
-            <NavLink className="nav-link" to="/collection">
-              My Collection
-            </NavLink>
-
-            {!user ? (
-              <>
-                <NavLink className="nav-link" to="/login">
-                  Account
-                </NavLink>
-              </>
-            ) : (
-              <button
-                className="btn btn-outline-light btn-sm ms-2"
-                onClick={logout}
-              >
-                Logout
-              </button>
-            )}
-          </div>
-        </div>
-      </nav>
-
-      {/* Login page */}
-      <main className="flex-grow-1 py-4">
-        <div className="container-fluid px-4">
-          <Routes>
-            <Route path="/" element={<Navigate to="/search" replace />} />
-            <Route
-              path="/login"
-              element={
+      {/* Main content */}
+      <main className="flex-grow-1">
+        <Routes>
+          <Route path="/" element={<Navigate to="/search" replace />} />
+          <Route
+            path="/login"
+            element={
+              <div className="container-fluid px-4 py-4">
                 <LoginPage
                   onAuthed={(u) => {
                     setUser(u);
                     navigate("/search");
                   }}
                 />
-              }
-            />
+              </div>
+            }
+          />
 
-            {/* Sign up page */}
-            <Route
-              path="/signup"
-              element={
+          {/* Sign up page */}
+          <Route
+            path="/signup"
+            element={
+              <div className="container-fluid px-4 py-4">
                 <SignupPage
                   onAuthed={(u) => {
                     setUser(u);
                     navigate("/search");
                   }}
                 />
-              }
-            />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/collection" element={<CollectionPage />} />
-          </Routes>
-        </div>
+              </div>
+            }
+          />
+          <Route path="/search" element={<div className="container-fluid px-4 py-4"><SearchPage /></div>} />
+          <Route path="/collection" element={<div className="container-fluid px-4 py-4"><CollectionPage /></div>} />
+          <Route path="/movie/:id" element={<MovieDetailsPage />} />
+        </Routes>
       </main>
     </div>
   );

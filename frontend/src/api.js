@@ -49,6 +49,12 @@ async function http(path, options = {}) {
     error.errors = errorObject.errors;
     throw error;
   }
+
+  // Handle 204 No Content responses (e.g., DELETE requests)
+  if (res.status === 204) {
+    return null;
+  }
+
   return res.json();
 }
 
@@ -79,6 +85,18 @@ export function me() {
 export async function searchMovies(query) {
   // Encode query to handle special characters
   const url = `${API_BASE}/search/movies?query=${encodeURIComponent(query)}`;
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Request failed: ${res.status}`);
+  }
+  return res.json();
+}
+
+// Fetch movie credits (cast and crew) by movie ID
+export async function getMovieCredits(movieId) {
+  const url = `${API_BASE}/search/movies/${movieId}/credits`;
   const res = await fetch(url);
 
   if (!res.ok) {

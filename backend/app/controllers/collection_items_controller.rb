@@ -56,7 +56,8 @@ class CollectionItemsController < ApplicationController
       :title,
       :poster_path,
       :release_date,
-      :vote_average
+      :vote_average,
+      :overview
     )
   end
 end

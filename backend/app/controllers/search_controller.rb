@@ -24,4 +24,23 @@ class SearchController < ApplicationController
     Rails.logger.warn("TMDB search failed")
     render json: { error: "Search failed" }, status: :bad_gateway
   end
+
+  # Get movie credits (cast and crew) by TMDB movie ID
+  def credits
+    movie_id = params[:id].to_i
+
+    # Validate movie ID
+    if movie_id <= 0
+      return render json: { error: "Invalid movie ID" }, status: :bad_request
+    end
+
+    # Fetch credits from TMDB API
+    client = Tmdb::Client.new(api_key: ENV.fetch("TMDB_API_KEY"))
+    render json: client.movie_credits(movie_id)
+  rescue KeyError
+    render json: { error: "Server is not configured" }, status: :internal_server_error
+  rescue StandardError => e
+    Rails.logger.warn("TMDB credits fetch failed: #{e.message}")
+    render json: { error: "Failed to fetch credits" }, status: :bad_gateway
+  end
 end

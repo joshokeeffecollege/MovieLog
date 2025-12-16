@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   # search
   get "/search/movies", to: "search#movies", as: :movies
+  get "/search/movies/:id/credits", to: "search#credits", as: :movie_credits
   post "/signup", to: "auth#signup"
   post "/login", to: "auth#login"
   get "/me", to: "auth#me"

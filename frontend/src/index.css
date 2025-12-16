@@ -1,12 +1,24 @@
+/* Grey/White Theme - Custom CSS Variables */
 :root {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #111;
-  background-color: #f5f5f8;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Grey/White Theme Colors */
+  --primary: #2d3748;        /* Dark grey */
+  --primary-hover: #1a202c;  /* Darker grey */
+  --secondary: #4a5568;      /* Medium grey */
+  --light-grey: #e2e8f0;     /* Light grey */
+  --bg-main: #f7fafc;        /* Off-white background */
+  --bg-card: #ffffff;        /* White cards */
+  --text-primary: #1a202c;   /* Dark text */
+  --text-secondary: #718096; /* Grey text */
+  --border-color: #e2e8f0;   /* Light border */
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 *,
@@ -18,11 +30,40 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #f5f5f8;
-  color: #111;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
 }
 
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* Custom button styles */
+.btn-custom-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.btn-custom-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: white;
+}
+
+/* Card hover effects */
+.movie-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Modal backdrop */
+.modal-backdrop-custom {
+  background-color: rgba(0, 0, 0, 0.7);
 }
