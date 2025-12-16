@@ -35,6 +35,7 @@ export default function CollectionPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sortBy, setSortBy] = useState("added"); // added, title, rating, year
 
   // Check for authentication token
   const token = localStorage.getItem("token");
@@ -72,6 +73,21 @@ export default function CollectionPage() {
     }
   }
 
+  // Sort items based on selected criteria
+  const sortedItems = [...items].sort((a, b) => {
+    switch (sortBy) {
+      case "title":
+        return a.title.localeCompare(b.title);
+      case "rating":
+        return (b.vote_average || 0) - (a.vote_average || 0);
+      case "year":
+        return (b.release_date || "").localeCompare(a.release_date || "");
+      case "added":
+      default:
+        return b.id - a.id; // Most recently added first
+    }
+  });
+
   // Prompt for login if not authenticated
   if (!token) {
     return (
@@ -93,6 +109,27 @@ export default function CollectionPage() {
         <div>
           <h1 className="h3 mb-0">My Collection</h1>
         </div>
+
+        {/* Sort dropdown */}
+        {items.length > 0 && (
+          <div className="d-flex align-items-center gap-2">
+            <label htmlFor="sort-select" className="mb-0 small text-secondary">
+              Sort by:
+            </label>
+            <select
+              id="sort-select"
+              className="form-select form-select-sm"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              style={{ width: "auto" }}
+            >
+              <option value="added">Recently Added</option>
+              <option value="title">Title (A-Z)</option>
+              <option value="rating">Rating (High-Low)</option>
+              <option value="year">Year (Newest)</option>
+            </select>
+          </div>
+        )}
       </div>
 
       {/* Error and loading */}
@@ -117,7 +154,7 @@ export default function CollectionPage() {
 
       {/* Maps the collection to a bootstrap grid */}
       <div className="row row-cols-2 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-3">
-        {items.map((m) => (
+        {sortedItems.map((m) => (
           <div key={m.id} className="col">
             <CollectionMovieCard movie={m} onRemove={onRemove} />
           </div>

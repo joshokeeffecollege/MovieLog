@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { addToCollection, listCollection, removeFromCollection, getMovieCredits } from "../api";
+import {
+  addToCollection,
+  listCollection,
+  removeFromCollection,
+  getMovieCredits,
+} from "../api";
 
 /**
  * Movie Details Page
@@ -77,7 +82,8 @@ export default function MovieDetailsPage() {
         setCast(credits.cast?.slice(0, 10) || []);
 
         // Get director(s) from crew
-        const directors = credits.crew?.filter(person => person.job === "Director") || [];
+        const directors =
+          credits.crew?.filter((person) => person.job === "Director") || [];
         setCrew(directors);
       } catch (err) {
         console.error("Failed to fetch credits:", err);
@@ -220,13 +226,17 @@ export default function MovieDetailsPage() {
             <div className="d-flex flex-wrap gap-4 mb-4 text-secondary">
               {movie.release_date && (
                 <div className="d-flex align-items-center gap-2">
-                  <span><strong>Year: </strong></span>
+                  <span>
+                    <strong>Year: </strong>
+                  </span>
                   <span>{new Date(movie.release_date).getFullYear()}</span>
                 </div>
               )}
               {movie.vote_average > 0 && (
                 <div className="d-flex align-items-center gap-2">
-                  <span><strong>Rating: </strong></span>
+                  <span>
+                    <strong>Rating: </strong>
+                  </span>
                   <span className="fw-semibold">
                     {movie.vote_average.toFixed(1)}/10
                   </span>
@@ -276,28 +286,46 @@ export default function MovieDetailsPage() {
                 {/* Director(s) */}
                 {crew.length > 0 && (
                   <div className="mb-4">
-                    <h3 className="h6 fw-semibold mb-3 text-secondary">Director{crew.length > 1 ? 's' : ''}</h3>
-                    <div className="d-flex gap-3 overflow-auto pb-3" style={{ scrollbarWidth: "thin" }}>
+                    <h3 className="h6 fw-semibold mb-3 text-secondary">
+                      Director{crew.length > 1 ? "s" : ""}
+                    </h3>
+                    <div
+                      className="d-flex gap-3 overflow-auto pb-3"
+                      style={{ scrollbarWidth: "thin" }}
+                    >
                       {crew.map((person) => (
-                        <div key={person.id} className="text-center" style={{ minWidth: "120px" }}>
+                        <div
+                          key={person.id}
+                          className="text-center"
+                          style={{ minWidth: "120px" }}
+                        >
                           <div className="mb-2">
                             {person.profile_path ? (
                               <img
                                 src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
                                 alt={person.name}
                                 className="rounded-3 shadow-sm"
-                                style={{ width: "120px", height: "180px", objectFit: "cover" }}
+                                style={{
+                                  width: "120px",
+                                  height: "180px",
+                                  objectFit: "cover",
+                                }}
                               />
                             ) : (
                               <div
                                 className="bg-light rounded-3 d-flex align-items-center justify-content-center"
                                 style={{ width: "120px", height: "180px" }}
                               >
-                                <span className="text-muted small">No photo</span>
+                                <span className="text-muted small">
+                                  No photo
+                                </span>
                               </div>
                             )}
                           </div>
-                          <div className="small fw-semibold text-truncate" title={person.name}>
+                          <div
+                            className="small fw-semibold text-truncate"
+                            title={person.name}
+                          >
                             {person.name}
                           </div>
                           <div className="small text-secondary">Director</div>
@@ -311,30 +339,49 @@ export default function MovieDetailsPage() {
                 {cast.length > 0 && (
                   <div>
                     <h3 className="h6 fw-semibold mb-3 text-secondary">Cast</h3>
-                    <div className="d-flex gap-3 overflow-auto pb-3" style={{ scrollbarWidth: "thin" }}>
+                    <div
+                      className="d-flex gap-3 overflow-auto pb-3"
+                      style={{ scrollbarWidth: "thin" }}
+                    >
                       {cast.map((person) => (
-                        <div key={person.id} className="text-center" style={{ minWidth: "120px" }}>
+                        <div
+                          key={person.id}
+                          className="text-center"
+                          style={{ minWidth: "120px" }}
+                        >
                           <div className="mb-2">
                             {person.profile_path ? (
                               <img
                                 src={`https://image.tmdb.org/t/p/w185${person.profile_path}`}
                                 alt={person.name}
                                 className="rounded-3 shadow-sm"
-                                style={{ width: "120px", height: "180px", objectFit: "cover" }}
+                                style={{
+                                  width: "120px",
+                                  height: "180px",
+                                  objectFit: "cover",
+                                }}
                               />
                             ) : (
                               <div
                                 className="bg-light rounded-3 d-flex align-items-center justify-content-center"
                                 style={{ width: "120px", height: "180px" }}
                               >
-                                <span className="text-muted small">No photo</span>
+                                <span className="text-muted small">
+                                  No photo
+                                </span>
                               </div>
                             )}
                           </div>
-                          <div className="small fw-semibold text-truncate" title={person.name}>
+                          <div
+                            className="small fw-semibold text-truncate"
+                            title={person.name}
+                          >
                             {person.name}
                           </div>
-                          <div className="small text-secondary text-truncate" title={person.character}>
+                          <div
+                            className="small text-secondary text-truncate"
+                            title={person.character}
+                          >
                             {person.character}
                           </div>
                         </div>

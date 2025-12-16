@@ -1,60 +1,77 @@
 import { NavLink } from "react-router-dom";
 
-/**
- * Navigation bar component with branding, navigation links, and user authentication status
- * Features grey theme, movie icon branding, and responsive layout
- */
 export default function Navbar({ user, onLogout }) {
   return (
-    <nav
-      className="navbar navbar-expand-lg shadow-sm"
-      style={{
-        backgroundColor: "var(--primary)",
-      }}
-    >
-      <div className="container-fluid px-4">
+    <nav className="navbar navbar-expand-lg bg-white shadow-sm">
+      <div className="container-fluid px-4 px-lg-5">
+        {/* Brand */}
         <NavLink
           to="/search"
-          className="navbar-brand fw-bold text-white d-flex align-items-center gap-2"
+          className="navbar-brand fw-semibold d-flex align-items-center gap-2"
+          style={{ color: "var(--primary)" }}
         >
-          <span>MovieLog</span>
+          MovieLog
         </NavLink>
 
-        {/* Navigation links */}
-        <div className="navbar-nav ms-auto gap-3 align-items-center">
-          <NavLink
-            className={({ isActive }) =>
-              `nav-link text-white ${isActive ? "fw-bold" : ""}`
-            }
-            to="/search"
-          >
-            Search
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              `nav-link text-white ${isActive ? "fw-bold" : ""}`
-            }
-            to="/collection"
-          >
-            My Collection
-          </NavLink>
+        {/* Mobile toggle */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-          {/* Authentication status - show login or user info */}
-          {!user ? (
-            <NavLink className="btn btn-outline-light btn-sm" to="/login">
-              Login
-            </NavLink>
-          ) : (
-            <div className="d-flex align-items-center gap-3">
-              <span className="text-white-50 small">{user.email}</span>
-              <button
-                className="btn btn-outline-light btn-sm"
-                onClick={onLogout}
+        {/* Navbar content */}
+        <div className="collapse navbar-collapse" id="mainNavbar">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-3">
+            <li className="nav-item">
+              <NavLink
+                to="/search"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active fw-semibold" : ""}`
+                }
               >
-                Logout
-              </button>
-            </div>
-          )}
+                Search
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink
+                to="/collection"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active fw-semibold" : ""}`
+                }
+              >
+                My Collection
+              </NavLink>
+            </li>
+          </ul>
+
+          {/* Auth section */}
+          <div className="d-flex align-items-center gap-3 ms-lg-4">
+            {!user ? (
+              <NavLink to="/login" className="btn btn-primary btn-sm">
+                Login
+              </NavLink>
+            ) : (
+              <>
+                <span className="text-muted small d-none d-lg-inline">
+                  {user.email}
+                </span>
+                <button
+                  className="btn btn-outline-primary btn-sm"
+                  onClick={onLogout}
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </nav>

@@ -89,3 +89,20 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.navbar-brand {
+  letter-spacing: 0.4px;
+}
+
+.nav-link {
+  font-weight: 500;
+  color: #495057;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+.nav-link.active {
+  color: var(--primary);
+}

@@ -15,7 +15,25 @@ class SearchController < ApplicationController
 
     # Perform search using TMDB API
     client = Tmdb::Client.new(api_key: ENV.fetch("TMDB_API_KEY"))
-    render json: client.search_movie(query)
+    results = client.search_movie(query)
+
+    # Filter and sort results
+    if results["results"]
+      filtered_results = results["results"].select do |movie|
+        # Only include movies with English original language or high popularity
+        movie["original_language"] == "en" || movie["popularity"].to_f > 20
+      end
+
+      # Sort by relevance (popularity and vote count)
+      sorted_results = filtered_results.sort_by do |movie|
+        # Higher popularity and vote count = better relevance
+        -(movie["popularity"].to_f * 0.7 + movie["vote_count"].to_i * 0.3)
+      end
+
+      results["results"] = sorted_results
+    end
+
+    render json: results
   rescue KeyError
     # Protect against leaking environment details (missing TMDB_API_KEY)
     render json: { error: "Server is not configured" }, status: :internal_server_error
