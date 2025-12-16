@@ -65,6 +65,7 @@ function AppShell() {
         </div>
       </nav>
 
+      {/* Login page */}
       <main className="flex-grow-1 py-4">
         <div className="container-fluid px-4">
           <Routes>
@@ -80,6 +81,8 @@ function AppShell() {
                 />
               }
             />
+
+            {/* Sign up page */}
             <Route
               path="/signup"
               element={

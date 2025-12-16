@@ -6,6 +6,7 @@ export default function CollectionPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Check for authentication token
   const token = localStorage.getItem("token");
 
   async function load() {
@@ -21,6 +22,7 @@ export default function CollectionPage() {
     }
   }
 
+  // Load collection
   useEffect(() => {
     if (!token) {
       setLoading(false);
@@ -29,6 +31,7 @@ export default function CollectionPage() {
     load();
   }, [token]);
 
+  // Handle removing a movie from the collection
   async function onRemove(id) {
     setError("");
     try {
@@ -39,6 +42,7 @@ export default function CollectionPage() {
     }
   }
 
+  // Prompt for login if not authenticated
   if (!token) {
     return (
       <div className="container mt-5">
@@ -61,6 +65,7 @@ export default function CollectionPage() {
         </div>
       </div>
 
+      {/* Error and loading */}
       {error && <div className="alert alert-danger">{error}</div>}
       {loading && (
         <div className="d-flex align-items-center gap-2 text-muted mb-3">
@@ -73,12 +78,14 @@ export default function CollectionPage() {
         </div>
       )}
 
+      {/* If no movies in collection */}
       {!loading && items.length === 0 && (
         <div className="alert alert-secondary text-center py-4 rounded-4">
           No movies yet.
         </div>
       )}
 
+      {/* Maps the collection to a bootstrap grid */}
       <div className="row row-cols-2 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-3">
         {items.map((m) => (
           <div key={m.id} className="col">

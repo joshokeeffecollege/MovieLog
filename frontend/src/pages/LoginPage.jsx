@@ -29,6 +29,7 @@ export default function LoginPage({ onAuthed }) {
     return Object.keys(errors).length === 0;
   }
 
+  // handle form submission
   async function onSubmit(e) {
     e.preventDefault();
     setError("");

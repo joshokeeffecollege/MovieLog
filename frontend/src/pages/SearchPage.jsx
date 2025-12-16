@@ -9,16 +9,19 @@ export default function SearchPage() {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
 
+  // Handle search form submission
   async function onSearch(e) {
     e.preventDefault();
     setError("");
     setInfo("");
     setResults([]);
 
+    // Trim query and check if it's empty
     const q = query.trim();
     if (!q) return;
-
     setLoading(true);
+
+    // Perform search
     try {
       const data = await searchMovies(q);
       const movies = Array.isArray(data) ? data : data.results || [];
@@ -31,10 +34,12 @@ export default function SearchPage() {
     }
   }
 
+  // Handle adding a movie to the collection
   async function onAdd(movie) {
     setError("");
     setInfo("");
 
+    // Prepare payload
     const payload = {
       tmdb_id: movie.id,
       title: movie.title,
@@ -43,6 +48,7 @@ export default function SearchPage() {
       vote_average: movie.vote_average,
     };
 
+    // Attempt to add to collection
     try {
       await addToCollection(payload);
       setInfo(`Added: ${movie.title}`);
@@ -54,6 +60,7 @@ export default function SearchPage() {
         setError("You must be logged in to add movies to your collection.");
       } else if (
         msg.includes(
+          // Check for duplicate error messages
           "has already been taken" || msg.toLowerCase().includes("tmdb")
         )
       ) {
@@ -71,6 +78,7 @@ export default function SearchPage() {
           <h1>Search</h1>
         </div>
         <div>
+          {/* Search box */}
           <form className="bg-white rounded-4 border p-3" onSubmit={onSearch}>
             <div className="input-group input-group-lg">
               <input
@@ -92,9 +100,11 @@ export default function SearchPage() {
         </div>
       </div>
 
+      {/* Error handling */}
       {error && <div className="alert alert-danger">{error}</div>}
       {info && <div className="alert alert-success">{info}</div>}
 
+      {/* Display message when added to collection */}
       {results.length === 0 && !loading && !error ? (
         <div></div>
       ) : (
