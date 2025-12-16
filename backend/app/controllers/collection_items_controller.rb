@@ -45,7 +45,7 @@ class CollectionItemsController < ApplicationController
 
   def set_collection_item
     # Use standard params and coerce to integer for hygiene.
-    @collection_item = CollectionItem.find(params[:id].to_i)
+    @collection_item = current_user.collection_items.find(params[:id].to_i)
   end
 
   def collection_item_params
