@@ -1,3 +1,4 @@
+# This controller manages CRUD operations for collection items associated with the authenticated user
 class CollectionItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_collection_item, only: %i[ show update destroy ]

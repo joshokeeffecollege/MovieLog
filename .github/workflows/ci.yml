@@ -97,15 +97,15 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
-# Job 3: Frontend tests
-frontend:
-  runs-on: ubuntu-latest
+  # Job 3: Frontend tests
+  frontend:
+    runs-on: ubuntu-latest
 
-  defaults:
-    run:
-      working-directory: frontend
+    defaults:
+      run:
+        working-directory: frontend
 
-  steps:
+    steps:
     # step 1: get code from the repository
     - name: Checkout code
       uses: actions/checkout@v5

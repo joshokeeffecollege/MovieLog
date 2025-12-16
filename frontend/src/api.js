@@ -1,14 +1,18 @@
+// API utility functions for interacting with the backend server
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
+// Token management
 function getToken() {
   return localStorage.getItem("token");
 }
 
+// Set or remove the authentication token in local storage
 export function setToken(token) {
   if (!token) localStorage.removeItem("token");
   else localStorage.setItem("token", token);
 }
 
+// HTTP request function with error handling
 async function http(path, options = {}) {
   const token = getToken();
 
@@ -48,6 +52,7 @@ async function http(path, options = {}) {
   return res.json();
 }
 
+// User authentication functions
 export function signup(email, password, passwordConfirmation) {
   return http(`/signup`, {
     method: "POST",
@@ -57,6 +62,7 @@ export function signup(email, password, passwordConfirmation) {
   });
 }
 
+// User login function
 export function login(email, password) {
   return http(`/login`, {
     method: "POST",
@@ -64,11 +70,14 @@ export function login(email, password) {
   });
 }
 
+// Fetch current user details
 export function me() {
   return http(`/me`);
 }
 
+// Movie search function
 export async function searchMovies(query) {
+  // Encode query to handle special characters
   const url = `${API_BASE}/search/movies?query=${encodeURIComponent(query)}`;
   const res = await fetch(url);
 
@@ -79,10 +88,12 @@ export async function searchMovies(query) {
   return res.json();
 }
 
+// Collection management functions
 export function listCollection() {
   return http(`/collection_items`);
 }
 
+// Add a movie to the collection
 export function addToCollection(movie) {
   return http(`/collection_items`, {
     method: "POST",
@@ -90,6 +101,7 @@ export function addToCollection(movie) {
   });
 }
 
+// Remove a movie from the collection by ID
 export function removeFromCollection(id) {
   return http(`/collection_items/${id}`, { method: "DELETE" });
 }

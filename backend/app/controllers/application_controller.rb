@@ -1,3 +1,4 @@
+# This class serves as the base controller for all other controllers in the application
 class ApplicationController < ActionController::API
   before_action :set_security_headers
 
@@ -12,6 +13,7 @@ class ApplicationController < ActionController::API
 
   private
 
+  # set security-related HTTP headers
   def set_security_headers
     # protection against MIME sniffing attacks
     response.set_header("X-Content-Type-Options", "nosniff")
@@ -29,6 +31,7 @@ class ApplicationController < ActionController::API
     )
   end
 
+   # JWT token handling methods
    def token_verifier
     @token_verifier ||= ActiveSupport::MessageVerifier.new(
       Rails.application.secret_key_base,
@@ -47,12 +50,14 @@ class ApplicationController < ActionController::API
     nil
   end
 
+  # extract bearer token from Authorization header
   def bearer_token
     header = request.headers["Authorization"].to_s
     return nil unless header.start_with?("Bearer ")
     header.delete_prefix("Bearer ").strip
   end
 
+  # retrieve the currently authenticated user based on the bearer token
   def current_user
     return @current_user if defined?(@current_user)
 

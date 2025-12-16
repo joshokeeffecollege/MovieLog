@@ -1,3 +1,4 @@
+// Imports
 import {
   BrowserRouter,
   Routes,
@@ -10,19 +11,21 @@ import SearchPage from "./pages/SearchPage";
 import CollectionPage from "./pages/CollectionPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import {me, setToken} from "./api";
+import { me, setToken } from "./api";
 import { useEffect, useState } from "react";
 
 function AppShell() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch current user on load
   useEffect(() => {
     me()
       .then((data) => setUser(data.user))
       .catch(() => setUser(null));
   }, []);
 
+  // Logout function
   function logout() {
     setToken(null);
     setUser(null);
@@ -35,6 +38,7 @@ function AppShell() {
         <div className="container-fluid px-4">
           <span className="navbar-brand fw-semibold">MovieLog</span>
 
+          {/* Navigation bar */}
           <div className="navbar-nav ms-auto gap-2">
             <NavLink className="nav-link" to="/search">
               Search
@@ -99,7 +103,7 @@ function AppShell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppShell/>
+      <AppShell />
     </BrowserRouter>
   );
 }

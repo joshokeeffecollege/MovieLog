@@ -1,3 +1,4 @@
+# This controller handles user authentication actions such as signup, login, and fetching the current user's details
 class AuthController < ApplicationController
   # POST /signup
   def signup
@@ -12,11 +13,14 @@ class AuthController < ApplicationController
 
   # POST /login
   def login
+    # downcase email for consistency
     email = params.require(:email).to_s.downcase.strip
     password = params.require(:password).to_s
 
+    # find user by email
     user = User.find_by(email: email)
 
+    # authenticate user and issue token
     if user&.authenticate(password)
       render json: { token: issue_token(user.id), user: { id: user.id, email: user.email } }
     else
