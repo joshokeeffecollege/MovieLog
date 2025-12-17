@@ -3,3 +3,7 @@
 set -o errexit
 
 bundle install
+
+if [[ -n "${DATABASE_URL:-}" ]]; then
+  bundle exec rails db:prepare
+fi

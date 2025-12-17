@@ -39,8 +39,8 @@ async function http(path, options = {}) {
 
     // throw error with message and validation errors
     const error = new Error(
-      // this means either errorObject has a message property or it fallback to generic messages
       errorObject.message ||
+        errorObject.error ||
         (res.status === 401
           ? "Invalid email or password"
           : `Request failed: ${res.status}`)
