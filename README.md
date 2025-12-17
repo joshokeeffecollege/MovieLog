@@ -28,7 +28,7 @@ MovieLog is a simple Ruby on Rails web app that lets you **search for movies**, 
 ## Setup Instructions
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR-USERNAME/MovieLog.git
+https://github.com/joshokeeffecollege/MovieLog
 cd MovieLog
 ```
 
