@@ -106,6 +106,20 @@ export async function getMovieCredits(movieId) {
   return res.json();
 }
 
+// Fetch trending movies (timeWindow: "day" or "week")
+export async function trendingMovies(timeWindow = "week") {
+  const url = `${API_BASE}/trending/movies?time_window=${encodeURIComponent(
+    timeWindow
+  )}`;
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Request failed: ${res.status}`);
+  }
+  return res.json();
+}
+
 // Collection management functions
 export function listCollection() {
   return http(`/collection_items`);

@@ -11,6 +11,7 @@ import CollectionPage from "./pages/CollectionPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
+import HomePage from "./pages/HomePage";
 import Navbar from "./components/Navbar";
 import { me, setToken } from "./api";
 import { useEffect, useState } from "react";
@@ -40,7 +41,7 @@ function AppShell() {
       {/* Main content */}
       <main className="flex-grow-1">
         <Routes>
-          <Route path="/" element={<Navigate to="/search" replace />} />
+          <Route path="/" element={<HomePage />} />
           <Route
             path="/login"
             element={

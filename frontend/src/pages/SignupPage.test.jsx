@@ -1,11 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import SignupPage from "./SignupPage";
 import * as api from "../api";
 
 // Mock the api module
 vi.mock("../api");
+
+function renderWithRouter(ui) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+}
 
 // Reset mocks before each test
 describe("SignupPage", () => {
@@ -13,10 +18,11 @@ describe("SignupPage", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStorage.clear();
   });
 
   it("renders signup form with email, password, and confirmation inputs", () => {
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     expect(screen.getByLabelText(/^email$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
@@ -29,7 +35,7 @@ describe("SignupPage", () => {
   // This test checks that a validation error is shown when the email field is left empty and the form is submitted
   it("shows validation error when email is empty", async () => {
     const user = userEvent.setup();
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const submitButton = screen.getByRole("button", { name: /sign up/i });
     await user.click(submitButton);
@@ -40,7 +46,7 @@ describe("SignupPage", () => {
   // This test checks that a validation error is shown when password field is empty
   it("shows validation error when password is empty", async () => {
     const user = userEvent.setup();
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/^email$/i);
     await user.type(emailInput, "test@example.com");
@@ -56,7 +62,7 @@ describe("SignupPage", () => {
   // This test checks that a validation error is shown when the password is less than 8 characters
   it("shows validation error when password is less than 8 characters", async () => {
     const user = userEvent.setup();
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/^email$/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
@@ -75,7 +81,7 @@ describe("SignupPage", () => {
   // This test checks that a validation error is shown when the password confirmation field is empty
   it("shows error when password confirmation is empty", async () => {
     const user = userEvent.setup();
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/^email$/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
@@ -94,7 +100,7 @@ describe("SignupPage", () => {
   // This test checks that a validation error is shown when the passwords do not match
   it("shows error when passwords do not match", async () => {
     const user = userEvent.setup();
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/^email$/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
@@ -120,7 +126,7 @@ describe("SignupPage", () => {
     };
     api.signup.mockRejectedValue(mockError);
 
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/^email$/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
@@ -148,7 +154,7 @@ describe("SignupPage", () => {
     api.signup.mockResolvedValue(mockData);
     api.setToken = vi.fn();
 
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/^email$/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
@@ -172,7 +178,7 @@ describe("SignupPage", () => {
     const user = userEvent.setup();
     api.signup.mockResolvedValue({ token: "fake-token", user: {} });
 
-    render(<SignupPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<SignupPage onAuthed={mockOnAuthed} />);
 
     const form = screen
       .getByRole("button", { name: /sign up/i })

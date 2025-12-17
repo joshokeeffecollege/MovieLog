@@ -1,5 +1,17 @@
 # This controller handles movie search functionality using the TMDB API
 class SearchController < ApplicationController
+  def trending_movies
+    time_window = params[:time_window].to_s.presence || "week"
+
+    client = Tmdb::Client.new(api_key: ENV.fetch("TMDB_API_KEY"))
+    render json: client.trending_movies(time_window: time_window)
+  rescue KeyError
+    render json: { error: "Server is not configured" }, status: :internal_server_error
+  rescue StandardError => e
+    Rails.logger.warn("TMDB trending fetch failed: #{e.message}")
+    render json: { error: "Failed to fetch trending movies" }, status: :bad_gateway
+  end
+
   def movies
     query = params[:query].to_s.strip
 

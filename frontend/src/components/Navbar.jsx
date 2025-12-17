@@ -6,7 +6,7 @@ export default function Navbar({ user, onLogout }) {
       <div className="container-fluid px-4 px-lg-5">
         {/* Brand */}
         <NavLink
-          to="/search"
+          to="/"
           className="navbar-brand fw-semibold d-flex align-items-center gap-2"
           style={{ color: "var(--primary)" }}
         >
@@ -29,6 +29,17 @@ export default function Navbar({ user, onLogout }) {
         {/* Navbar content */}
         <div className="collapse navbar-collapse" id="mainNavbar">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-3">
+            <li className="nav-item">
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active fw-semibold" : ""}`
+                }
+                end
+              >
+                Home
+              </NavLink>
+            </li>
             <li className="nav-item">
               <NavLink
                 to="/search"

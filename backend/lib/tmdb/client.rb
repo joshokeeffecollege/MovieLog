@@ -22,6 +22,13 @@ module Tmdb
       get_json("/movie/#{movie_id}/credits", {})
     end
 
+    # Get trending movies from TMDB (time_window: "day" or "week")
+    def trending_movies(time_window: "week")
+      window = time_window.to_s
+      window = "week" unless %w[day week].include?(window)
+      get_json("/trending/movie/#{window}", {})
+    end
+
     private
 
     # Perform a GET request and parse JSON response

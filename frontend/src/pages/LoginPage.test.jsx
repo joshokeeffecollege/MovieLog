@@ -3,11 +3,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import * as api from "../api";
 
 // Mock the api module
 vi.mock("../api");
+
+function renderWithRouter(ui) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>);
+}
 
 describe("LoginPage", () => {
   // Mock onAuthed callback
@@ -16,11 +21,12 @@ describe("LoginPage", () => {
   // Reset mocks before each test
   beforeEach(() => {
     vi.clearAllMocks();
+    sessionStorage.clear();
   });
 
   // This test checks that the login form renders correctly
   it("renders login form with email and password inputs", () => {
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     // Check for email and password input fields and submit button by label and role
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -32,7 +38,7 @@ describe("LoginPage", () => {
   // the email field is left empty and the form is submitted
   it("shows validation error when email is empty", async () => {
     const user = userEvent.setup();
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const submitButton = screen.getByRole("button", { name: /log in/i });
     await user.click(submitButton);
@@ -44,7 +50,7 @@ describe("LoginPage", () => {
   // This test checks that a validation error is shown when password field is empty
   it("shows validation error when password is empty", async () => {
     const user = userEvent.setup();
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     await user.type(emailInput, "test@example.com");
@@ -60,7 +66,7 @@ describe("LoginPage", () => {
   // This test checks that a validation error is shown when the password is less than 8 characters
   it("shows validation error when password is less than 8 characters", async () => {
     const user = userEvent.setup();
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -86,7 +92,7 @@ describe("LoginPage", () => {
     };
     api.login.mockRejectedValue(mockError);
 
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -108,7 +114,7 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
     api.login.mockRejectedValue(new Error("Invalid email or password"));
 
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -135,7 +141,7 @@ describe("LoginPage", () => {
     api.login.mockResolvedValue(mockData);
     api.setToken = vi.fn();
 
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -157,7 +163,7 @@ describe("LoginPage", () => {
     const user = userEvent.setup();
     api.login.mockResolvedValue({ token: "fake-token", user: {} });
 
-    render(<LoginPage onAuthed={mockOnAuthed} />);
+    renderWithRouter(<LoginPage onAuthed={mockOnAuthed} />);
 
     const form = screen
       .getByRole("button", { name: /log in/i })
