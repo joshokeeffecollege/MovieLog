@@ -11,6 +11,14 @@ class ApplicationController < ActionController::API
     render json: { error: e.message }, status: :bad_request
   end
 
+  rescue_from ActiveRecord::ConnectionNotEstablished do
+    render json: { error: "Database unavailable" }, status: :internal_server_error
+  end
+
+  rescue_from PG::ConnectionBad do
+    render json: { error: "Database unavailable" }, status: :internal_server_error
+  end
+
   private
 
   # set security-related HTTP headers
@@ -73,7 +81,8 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user!
-    return if current_user
-    render json: { error: "Unauthorized" }, status: :unauthorized and return
+    return true if current_user
+    render json: { error: "Unauthorized" }, status: :unauthorized
+    false
   end
 end

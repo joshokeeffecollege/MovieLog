@@ -30,7 +30,7 @@ class AuthController < ApplicationController
 
   # GET /me
   def me
-    authenticate_user!
+    return unless authenticate_user!
     render json: { user: { id: current_user.id, email: current_user.email } }
   end
 
