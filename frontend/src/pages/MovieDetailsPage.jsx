@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   addToCollection,
   listCollection,
@@ -7,14 +7,10 @@ import {
   getMovieCredits,
 } from "../api";
 
-/**
- * Movie Details Page
- * Full-page view with poster on left (fixed) and scrollable details on right
- * Features: poster, title, year, rating, overview, and add/remove from collection
- */
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,17 +24,18 @@ export default function MovieDetailsPage() {
 
   // Load movie data from location state or fetch from API
   useEffect(() => {
-    // Get movie data passed via navigation state
-    const movieData = window.history.state?.usr?.movie;
+    // Prefer React Router state; fall back to history state for compatibility.
+    const movieData = location.state?.movie ?? window.history.state?.usr?.movie;
 
     if (movieData) {
       setMovie(movieData);
       setLoading(false);
     } else {
       // If no movie data, redirect back to search
-      navigate("/search");
+      setLoading(false);
+      navigate("/search", { replace: true });
     }
-  }, [id, navigate]);
+  }, [id, location.state, navigate]);
 
   // Check if movie is already in collection
   useEffect(() => {
