@@ -1,14 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function MovieCard({ movie, onClick }) {
   const [imageError, setImageError] = useState(false);
   const showPoster = movie.poster_path && !imageError;
 
   return (
-    <div
+    <button
+      type="button"
       className="card h-100 shadow-sm border-0 rounded-3 overflow-hidden movie-card"
       onClick={onClick}
+      aria-label={movie.title}
     >
       {/* Movie poster */}
       {showPoster ? (
@@ -27,7 +29,11 @@ function MovieCard({ movie, onClick }) {
           <span className="text-muted small">No poster</span>
         </div>
       )}
-    </div>
+
+      <div className="p-2">
+        <div className="small fw-semibold text-truncate">{movie.title}</div>
+      </div>
+    </button>
   );
 }
 

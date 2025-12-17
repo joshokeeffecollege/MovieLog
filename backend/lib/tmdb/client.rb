@@ -4,7 +4,6 @@ require "openssl"
 
 module Tmdb
   class Client
-
     # TMDB base url
     BASE_URL = "https://api.themoviedb.org/3".freeze
 
@@ -44,7 +43,6 @@ module Tmdb
         store.set_default_paths
       end
       http.cert_store = store
-
 
       # Create and send the GET request for JSON response
       req = Net::HTTP::Get.new(uri.request_uri)
