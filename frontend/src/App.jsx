@@ -41,7 +41,7 @@ function AppShell() {
       {/* Main content */}
       <main className="flex-grow-1">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<div className="container-fluid px-4 py-4"><HomePage /></div>} />
           <Route
             path="/login"
             element={

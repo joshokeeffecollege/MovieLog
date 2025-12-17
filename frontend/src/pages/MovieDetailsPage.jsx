@@ -7,6 +7,11 @@ import {
   getMovieCredits,
 } from "../api";
 
+/**
+ * Movie Details Page
+ * Full-page view with poster on left (fixed) and scrollable details on right
+ * Features: poster, title, year, rating, overview, and add/remove from collection
+ */
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();

@@ -118,7 +118,9 @@ describe("SearchPage", () => {
     await user.click(searchButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/the matrix reloaded/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /the matrix reloaded/i })
+      ).toBeInTheDocument();
     });
   });
 

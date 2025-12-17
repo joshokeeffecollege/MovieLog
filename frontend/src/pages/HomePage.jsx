@@ -33,27 +33,25 @@ export default function HomePage() {
 
   return (
     <div className="w-100 p-4 p-md-5">
-      <div className="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
+      <div className="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
         <div>
-          <h1 className="display-6 mb-1">MovieLog</h1>
-          <div className="text-muted">
-            Search movies, save favorites, and track your collection.
+          <h1 className="h3 mb-1">MovieLog</h1>
+          <div className="text-muted small">
+            Search for movies, save your favorites, and track your collection.
           </div>
         </div>
 
         <div className="d-flex gap-2">
-          <Link to="/search" className="btn btn-primary">
+          <Link to="/search" className="btn btn-primary btn-sm">
             Search movies
           </Link>
-          <Link to="/collection" className="btn btn-outline-primary">
+          <Link to="/collection" className="btn btn-outline-primary btn-sm">
             View collection
           </Link>
         </div>
       </div>
 
-      <div className="d-flex align-items-end justify-content-between mb-3">
-        <h2 className="h5 mb-0">Trending this week</h2>
-      </div>
+      <h2 className="h5 mb-3">Trending this week</h2>
 
       {loading && (
         <div className="d-flex justify-content-center align-items-center py-5">
@@ -76,4 +74,3 @@ export default function HomePage() {
     </div>
   );
 }
-
