@@ -19,6 +19,14 @@ class ApplicationController < ActionController::API
     render json: { error: "Database unavailable" }, status: :internal_server_error
   end
 
+  rescue_from ActiveRecord::StatementInvalid do |e|
+    if e.cause.is_a?(PG::UndefinedTable)
+      render json: { error: "Database not migrated" }, status: :internal_server_error
+    else
+      raise
+    end
+  end
+
   private
 
   # set security-related HTTP headers
