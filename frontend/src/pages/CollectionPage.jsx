@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { listCollection, removeFromCollection } from "../api";
 
 function CollectionMovieCard({ movie, onRemove }) {
@@ -95,7 +95,7 @@ export default function CollectionPage() {
         <div className="alert alert-outline-warning text-center">
           <h4>Authentication Required</h4>
           <p>
-            Please <a href="/login">log in</a> or <a href="/signup">sign up</a>{" "}
+            Please <Link to="/login">log in</Link> or <Link to="/signup">sign up</Link>{" "}
             to view your collection
           </p>
         </div>

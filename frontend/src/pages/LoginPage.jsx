@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { login, setToken } from "../api";
 
 export default function LoginPage({ onAuthed }) {
@@ -114,7 +115,7 @@ export default function LoginPage({ onAuthed }) {
           </div>
           <button className="btn btn-primary">Log in</button>
           <div className="text-muted sm">
-            Don't have an account? <a href="/signup">Sign up</a>
+            Don't have an account? <Link to="/signup">Sign up</Link>
           </div>
         </form>
       </div>
